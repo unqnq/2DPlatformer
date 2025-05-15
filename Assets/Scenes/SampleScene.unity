@@ -73605,8 +73605,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1137077932}
-        m_TargetAssemblyTypeName: PLayerMovement, Assembly-CSharp
-        m_MethodName: Move
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -73637,8 +73637,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1137077932}
-        m_TargetAssemblyTypeName: PLayerMovement, Assembly-CSharp
-        m_MethodName: Jump
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: OnJump
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -73783,20 +73783,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c1ec48bbcabbd46aefa89f7119748c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 1137077931}
-  moveSpeed: 10
-  horizontalMovement: 0
+  walkSpeed: 4
+  runSpeed: 8
+  doubleTapTime: 0.2
+  isRunning: 0
+  horizontalInput: 0
   jumpPower: 15
   maxJumps: 2
-  currentJumps: 0
-  groundCheckPosition: {fileID: 861539542}
+  groundCheck: {fileID: 861539542}
   groundCheckSize: {x: 1, y: 1}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   baseGravity: 2
   maxFallSpeed: 18
-  fallSpeedMultiplier: 4
+  fallMultiplier: 4
 --- !u!1 &1159558740
 GameObject:
   m_ObjectHideFlags: 0
@@ -75279,6 +75280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1676669664}
+  idleDelay: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

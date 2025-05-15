@@ -1,75 +1,99 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] Rigidbody2D rb;
+    [Header("Components")]
+    private Rigidbody2D rb;
 
-    [Header("Movement")]
-    public float moveSpeed = 10f;
-    public float horizontalMovement;
+    [Header("Movement Settings")]
+    [SerializeField] private float walkSpeed = 10f;
+    [SerializeField] private float runSpeed = 15f;
+    [SerializeField] private float doubleTapTime = 0.2f;
 
-    [Header("Jump")]
-    public float jumpPower = 15f;
-    public int maxJumps = 2;
-    public int currentJumps = 0;
+    [HideInInspector] public bool isRunning = false;
+    private float lastTapTime = -1f;
+    private int lastDirection = 0;
+    private int currentDirection = 0;
+    [HideInInspector] public float horizontalInput = 0f;
+
+    [Header("Jump Settings")]
+    [SerializeField] private float jumpPower = 15f;
+    [SerializeField] private int maxJumps = 2;
+    private int currentJumps = 0;
 
     [Header("Ground Check")]
-    public Transform groundCheckPosition;
-    public Vector2 groundCheckSize = new Vector2(0.5f, 0.1f);
-    public LayerMask groundLayer;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.5f, 0.1f);
+    [SerializeField] private LayerMask groundLayer;
 
-    [Header("Gravity")]
-    public float baseGravity = 2f;
-    public float maxFallSpeed = 18f;
-    public float fallSpeedMultiplier = 4f;
+    [Header("Gravity Settings")]
+    [SerializeField] private float baseGravity = 2f;
+    [SerializeField] private float maxFallSpeed = 18f;
+    [SerializeField] private float fallMultiplier = 4f;
 
-    void Update()
+    void Awake()
     {
-        GroundCheck();
+        rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = baseGravity;
     }
-    void FixedUpdate()
+    private void Update()
     {
-        rb.linearVelocityX = horizontalMovement * moveSpeed;
-        if (horizontalMovement < 0)
+        CheckGrounded();
+    }
+
+    private void FixedUpdate()
+    {
+        MoveCharacter();
+        ApplyGravity();
+        FlipSprite();
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        horizontalInput = context.ReadValue<Vector2>().x;
+
+        if (context.performed && horizontalInput != 0)
         {
-            gameObject.transform.localScale = new Vector3(-1, 1, 1);
+            HandleDoubleTap();
         }
-        else
-        {
-            gameObject.transform.localScale = new Vector3(1, 1, 1);
-        }
-        Gravity();
-    }
 
-    public void Move(InputAction.CallbackContext context)
-    {
-        horizontalMovement = context.ReadValue<Vector2>().x;
-    }
-
-    public void Jump(InputAction.CallbackContext context)
-    {
-        if (currentJumps > 0)
+        if (context.canceled)
         {
-            if (context.performed)
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpPower);
-                currentJumps--;
-            }
-            else if (context.canceled)
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpPower / 2);
-                currentJumps--;
-            }
+            horizontalInput = 0f;
+            isRunning = false;
         }
     }
 
-    void Gravity()
+    public void OnJump(InputAction.CallbackContext context)
     {
-        if (rb.linearVelocityY < 0)
+        if (currentJumps <= 0) return;
+
+        if (context.performed)
         {
-            rb.gravityScale = baseGravity * fallSpeedMultiplier;
-            rb.linearVelocity = new Vector2(rb.linearVelocityX, Mathf.Max(rb.linearVelocity.y, -maxFallSpeed));
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+            currentJumps--;
+        }
+        else if (context.canceled)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower / 2);
+            currentJumps--;
+        }
+    }
+
+    private void MoveCharacter()
+    {
+        float speed = isRunning ? runSpeed : walkSpeed;
+        rb.linearVelocity = new Vector2(horizontalInput * speed, rb.linearVelocity.y);
+    }
+
+    private void ApplyGravity()
+    {
+        if (rb.linearVelocity.y < 0)
+        {
+            rb.gravityScale = baseGravity * fallMultiplier;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Max(rb.linearVelocity.y, -maxFallSpeed));
         }
         else
         {
@@ -77,17 +101,44 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void OnDrawGizmosSelected()
+    private void CheckGrounded()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(groundCheckPosition.position, groundCheckSize);
-    }
-
-    private void GroundCheck()
-    {
-        if (Physics2D.OverlapBox(groundCheckPosition.position, groundCheckSize, 0f, groundLayer))
+        if (Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer))
         {
             currentJumps = maxJumps;
         }
+    }
+
+    private void FlipSprite()
+    {
+        if (horizontalInput == 0) return;
+
+        currentDirection = horizontalInput > 0 ? 1 : -1;
+        transform.localScale = new Vector3(currentDirection, 1f, 1f);
+    }
+
+    private void HandleDoubleTap()
+    {
+        currentDirection = horizontalInput > 0 ? 1 : -1;
+
+        if (currentDirection == lastDirection && Time.time - lastTapTime < doubleTapTime)
+        {
+            isRunning = true;
+        }
+        else
+        {
+            isRunning = false;
+        }
+
+        lastTapTime = Time.time;
+        lastDirection = currentDirection;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (groundCheck == null) return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
     }
 }
