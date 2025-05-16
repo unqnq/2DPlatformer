@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Components")]
     private Rigidbody2D rb;
+    public ParticleSystem smokeFx;
 
     [Header("Movement Settings")]
     [SerializeField] private float walkSpeed = 10f;
@@ -74,11 +75,13 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
             currentJumps--;
+            smokeFx.Play();
         }
         else if (context.canceled)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower / 2);
             currentJumps--;
+            smokeFx.Play();
         }
     }
 
@@ -124,6 +127,7 @@ public class PlayerMovement : MonoBehaviour
         if (currentDirection == lastDirection && Time.time - lastTapTime < doubleTapTime)
         {
             isRunning = true;
+            smokeFx.Play();
         }
         else
         {
