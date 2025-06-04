@@ -8,9 +8,9 @@ public class MoveParallax : MonoBehaviour
     void Update()
     {
         transform.position += Vector3.left * Time.deltaTime * speed;
-        if (transform.position.x < -38f)
+        if (transform.position.x < -41f)
         {
-            transform.position = new Vector3(42f, transform.position.y, transform.position.z);
+            transform.position = new Vector3(46f, transform.position.y, transform.position.z);
         }
     }
 }
