@@ -21,17 +21,18 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-         leftRayOrigin = new Vector2(transform.position.x - 1.2f, transform.position.y);
+        leftRayOrigin = new Vector2(transform.position.x - 1.2f, transform.position.y);
         rightRayOrigin = new Vector2(transform.position.x + 1f, transform.position.y);
         isGroundedLeft = Physics2D.Raycast(leftRayOrigin, Vector2.down, 1.5f, groundLayer);
         isGroundedRight = Physics2D.Raycast(rightRayOrigin, Vector2.down, 1.5f, groundLayer);
         Debug.DrawRay(leftRayOrigin, Vector2.down * 1.5f, Color.red);
         Debug.DrawRay(rightRayOrigin, Vector2.down * 1.5f, Color.red);
         float direction = Mathf.Sign(player.position.x - transform.position.x);
-         bool isPlayerAbove = Physics2D.Raycast(transform.position, Vector2.up, 5f, 1 << player.gameObject.layer);
+        bool isPlayerAbove = Physics2D.Raycast(transform.position, Vector2.up, 5f, 1 << player.gameObject.layer);
         if (isGroundedRight || isGroundedLeft)
         {
             hasJumped = false;
+            transform.localScale =(direction > 0) ? new Vector3(-1.5f, 1.5f, 1.5f) : new Vector3(1.5f, 1.5f, 1.5f);
             rb.linearVelocity = new Vector2(direction * speed, rb.linearVelocityY);
             RaycastHit2D groundInFront = Physics2D.Raycast(transform.position, new Vector2(direction, 0), 2f, groundLayer);
             RaycastHit2D gapAhead = Physics2D.Raycast(transform.position + new Vector3(direction, 0, 0), Vector2.down, 2f, groundLayer);
