@@ -9802,6 +9802,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1681853873}
   - component: {fileID: 1681853872}
+  - component: {fileID: 1681853874}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -9823,7 +9824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   proggressAmount: 0
   progressSlider: {fileID: 1292716125}
-  maxProgress: 10
+  maxProgress: 0
   isLevelComplete: 0
 --- !u!4 &1681853873
 Transform:
@@ -9840,6 +9841,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1681853874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681853871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94bcf335f9365494e9ac8898fa9a34bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectPrefabs: []
+  bigMilkProbability: 0.2
+  enemyProbability: 0.1
+  spawnInterval: 2
 --- !u!1 &2083427070
 GameObject:
   m_ObjectHideFlags: 0
@@ -14931,6 +14948,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3102006154990666486, guid: 6806bb74e5c3aed4a8a3e93c284aa0a2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15005,13 +15026,13 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1159558742}
   - {fileID: 1471482277}
-  - {fileID: 224347851}
   - {fileID: 1137077928}
   - {fileID: 542607850}
   - {fileID: 1681853873}
   - {fileID: 495601816}
   - {fileID: 1184126531}
-  - {fileID: 1187010248}
-  - {fileID: 619394802}
   - {fileID: 31385939}
   - {fileID: 5767780048602029833}
+  - {fileID: 224347851}
+  - {fileID: 1187010248}
+  - {fileID: 619394802}

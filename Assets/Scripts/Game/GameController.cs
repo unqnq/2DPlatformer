@@ -7,10 +7,19 @@ public class GameController : MonoBehaviour
 {
     public int proggressAmount = 0;
     public Slider progressSlider;
-    public int maxProgress = 10;
+    public int maxProgress;
     public bool isLevelComplete = false;
     void Start()
     {
+        GameObject[] foods = GameObject.FindGameObjectsWithTag("Food");
+        foreach (GameObject food in foods)
+        {
+            Food foodScript = food.GetComponent<Food>();
+            if (foodScript != null)
+            {
+                maxProgress += foodScript.foodValue;
+            }
+        }
         Food.OnFoodCollected += AddProgress;
         HoldToLoadLevel.OnHoldComplete += LoadNextLevel;
         progressSlider.value = 0;
