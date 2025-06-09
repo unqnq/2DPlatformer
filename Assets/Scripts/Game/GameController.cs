@@ -11,15 +11,16 @@ public class GameController : MonoBehaviour
     public bool isLevelComplete = false;
     void Start()
     {
-        GameObject[] foods = GameObject.FindGameObjectsWithTag("Food");
-        foreach (GameObject food in foods)
-        {
-            Food foodScript = food.GetComponent<Food>();
-            if (foodScript != null)
-            {
-                maxProgress += foodScript.foodValue;
-            }
-        }
+        // GameObject[] foods = GameObject.FindGameObjectsWithTag("Food");
+        // foreach (GameObject food in foods)
+        // {
+        //     Food foodScript = food.GetComponent<Food>();
+        //     if (foodScript != null)
+        //     {
+        //         maxProgress += foodScript.foodValue;
+        //     }
+        // }
+        maxProgress = GameObject.Find("GameController").GetComponent<ObjectSpawn>().maxObjectsToSpawn;
         Food.OnFoodCollected += AddProgress;
         HoldToLoadLevel.OnHoldComplete += LoadNextLevel;
         progressSlider.value = 0;

@@ -5831,7 +5831,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &224347851
 Transform:
   m_ObjectHideFlags: 0
@@ -7378,7 +7378,7 @@ GameObject:
   - component: {fileID: 1137077934}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9853,10 +9853,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94bcf335f9365494e9ac8898fa9a34bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectPrefabs: []
+  tilemap: {fileID: 1645130473}
+  objectPrefabs:
+  - {fileID: 38244733073967229, guid: 1acf17192faed3243b69273934f20c0f, type: 3}
+  - {fileID: 38244733073967229, guid: 6b0323d5447bc90428ad7232b185a7af, type: 3}
+  - {fileID: 3102006154990666486, guid: 6806bb74e5c3aed4a8a3e93c284aa0a2, type: 3}
   bigMilkProbability: 0.2
   enemyProbability: 0.1
+  maxObjectsToSpawn: 15
   spawnInterval: 2
+  lifeTime: 15
 --- !u!1 &2083427070
 GameObject:
   m_ObjectHideFlags: 0

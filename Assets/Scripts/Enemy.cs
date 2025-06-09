@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public Transform player;
     public float speed = 2f;
     public float jumpForce = 5f;
     public LayerMask groundLayer;
 
+    public Transform player;
     private Rigidbody2D rb;
     private bool isGroundedRight, isGroundedLeft;
     private Vector2 leftRayOrigin, rightRayOrigin;
@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
        
     }
