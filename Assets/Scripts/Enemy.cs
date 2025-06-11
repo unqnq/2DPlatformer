@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public int damage = 1;
     public float speed = 2f;
     public float jumpForce = 5f;
     public LayerMask groundLayer;
