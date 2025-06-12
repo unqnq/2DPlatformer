@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class PlayerHearts : MonoBehaviour
 
     private int currentHearts;
     private SpriteRenderer spriteRenderer;
+    public static event Action OnPlayerDied;
 
     void Start()
     {
@@ -32,7 +34,8 @@ public class PlayerHearts : MonoBehaviour
         StartCoroutine(FlashRed());
         if (currentHearts <= 0)
         {
-            Debug.Log("player is dead!");
+            // Debug.Log("player is dead!");
+            OnPlayerDied.Invoke();
         }
     }
 

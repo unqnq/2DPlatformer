@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameController : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class GameController : MonoBehaviour
     public Slider progressSlider;
     public int maxProgress;
     public bool isLevelComplete = false;
+    public GameObject gameOverPanel;
+    public TMP_Text itemsText, itemsText_Border;
     void Start()
     {
         // GameObject[] foods = GameObject.FindGameObjectsWithTag("Food");
@@ -20,11 +23,14 @@ public class GameController : MonoBehaviour
         //         maxProgress += foodScript.foodValue;
         //     }
         // }
-        maxProgress = GameObject.Find("GameController").GetComponent<ObjectSpawn>().maxObjectsToSpawn;
+        maxProgress = GameObject.Find("ObjectSpawn").GetComponent<ObjectSpawn>().maxObjectsToSpawn;
         Food.OnFoodCollected += AddProgress;
         HoldToLoadLevel.OnHoldComplete += LoadNextLevel;
         progressSlider.value = 0;
         progressSlider.maxValue = maxProgress;
+        gameOverPanel = GameObject.Find("GameOverPanel");
+        gameOverPanel.SetActive(false);
+        PlayerHearts.OnPlayerDied += GameOverPanel;
     }
 
     void AddProgress(int foodValue)
@@ -40,11 +46,24 @@ public class GameController : MonoBehaviour
     void LoadNextLevel()
     {
         //  Debug.Log(SceneManager.sceneCountInBuildSettings + " / " + SceneManager.GetActiveScene().buildIndex);
-        if (SceneManager.sceneCountInBuildSettings == SceneManager.GetActiveScene().buildIndex+1)
+        if (SceneManager.sceneCountInBuildSettings == SceneManager.GetActiveScene().buildIndex + 1)
         {
             SceneManager.LoadScene("Menu");
 
         }
         else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    void GameOverPanel()
+    {
+        gameOverPanel.SetActive(true);
+        itemsText.text = "You have collected " + proggressAmount + "/" + maxProgress;
+        itemsText_Border.text = "You have collected " + proggressAmount + "/" + maxProgress;
+    }
+
+    public void RestartGame()
+    {
+        gameOverPanel.SetActive(false);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
