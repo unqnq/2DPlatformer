@@ -1,13 +1,19 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     public int damage = 1;
+
     public float speed = 2f;
     public float jumpForce = 5f;
     public LayerMask groundLayer;
-
     public Transform player;
+
+    public int maxHealth = 3;
+    private int currentHealth;
+    private SpriteRenderer spriteRenderer;
+
     private Rigidbody2D rb;
     private bool isGroundedRight, isGroundedLeft;
     private Vector2 leftRayOrigin, rightRayOrigin;
@@ -18,7 +24,8 @@ public class Enemy : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
-       
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        currentHealth = maxHealth;
     }
 
     void Update()
@@ -34,7 +41,7 @@ public class Enemy : MonoBehaviour
         if (isGroundedRight || isGroundedLeft)
         {
             hasJumped = false;
-            transform.localScale =(direction > 0) ? new Vector3(-1.5f, 1.5f, 1.5f) : new Vector3(1.5f, 1.5f, 1.5f);
+            transform.localScale = (direction > 0) ? new Vector3(-1.5f, 1.5f, 1.5f) : new Vector3(1.5f, 1.5f, 1.5f);
             rb.linearVelocity = new Vector2(direction * speed, rb.linearVelocityY);
             RaycastHit2D groundInFront = Physics2D.Raycast(transform.position, new Vector2(direction, 0), 2f, groundLayer);
             RaycastHit2D gapAhead = Physics2D.Raycast(transform.position + new Vector3(direction, 0, 0), Vector2.down, 2f, groundLayer);
@@ -60,5 +67,27 @@ public class Enemy : MonoBehaviour
             Vector2 jumpDirection = direction * jumpForce;
             rb.AddForce(new Vector2(jumpDirection.x, jumpForce), ForceMode2D.Impulse);
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        StartCoroutine(FlashRed());
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    IEnumerator FlashRed()
+    {
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = Color.white;
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 }

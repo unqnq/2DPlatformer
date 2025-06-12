@@ -42,9 +42,7 @@ public class PlayerHearts : MonoBehaviour
     IEnumerator FlashRed()
     {
         spriteRenderer.color = Color.red;
-        Debug.Log("red");
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = Color.white;
-        Debug.Log("white");
     }
 }

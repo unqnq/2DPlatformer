@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class GameController : MonoBehaviour
 {
@@ -59,11 +60,13 @@ public class GameController : MonoBehaviour
         gameOverPanel.SetActive(true);
         itemsText.text = "You have collected " + proggressAmount + "/" + maxProgress;
         itemsText_Border.text = "You have collected " + proggressAmount + "/" + maxProgress;
+        Time.timeScale = 0;
     }
 
     public void RestartGame()
     {
         gameOverPanel.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1;
     }
 }
