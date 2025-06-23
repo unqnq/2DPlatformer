@@ -16,6 +16,7 @@ public class PlayerHearts : MonoBehaviour
         currentHearts = maxHearts;
         healthBarUI.SetMaxHearts(maxHearts);
         spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        HealthItem.OnHealCollect += Heal;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -44,5 +45,13 @@ public class PlayerHearts : MonoBehaviour
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = Color.white;
+    }
+
+    void Heal(int amount)
+    {
+        currentHearts += amount;
+        if (currentHearts > maxHearts) currentHearts = maxHearts;
+
+        healthBarUI.UpdateHearts(currentHearts);
     }
 }

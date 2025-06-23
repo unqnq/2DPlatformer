@@ -152,14 +152,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd9b83d7a7ebb4a46b16670adf1c2d8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  damage: 1
   speed: 2
   jumpForce: 2
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  isGrounded: 0
-  shouldJump: 0
+  player: {fileID: 0}
+  maxHealth: 3
+  lootTable:
+  - lootPrefab: {fileID: 38244733073967229, guid: 1acf17192faed3243b69273934f20c0f, type: 3}
+    dropChance: 50
+  - lootPrefab: {fileID: 38244733073967229, guid: 6b0323d5447bc90428ad7232b185a7af, type: 3}
+    dropChance: 50
+  - lootPrefab: {fileID: 421393731035497843, guid: f66c00dc6b5b72043b027c4d1a17a826, type: 3}
+    dropChance: 50
+  - lootPrefab: {fileID: 3102006154990666486}
+    dropChance: 100
 --- !u!61 &1934204604845420989
 BoxCollider2D:
   m_ObjectHideFlags: 0

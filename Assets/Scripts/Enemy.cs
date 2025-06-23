@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -19,6 +20,9 @@ public class Enemy : MonoBehaviour
     private Vector2 leftRayOrigin, rightRayOrigin;
     private bool shouldJump;
     private bool hasJumped = false;
+
+    [Header("Loot")]
+    public List<LootItem> lootTable = new List<LootItem>();
 
     void Start()
     {
@@ -88,6 +92,22 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        foreach (LootItem lootItem in lootTable)
+        {
+            if (Random.Range(0f, 100f) <= lootItem.dropChance)
+            {
+                IntantiateLoot(lootItem.lootPrefab);
+            }
+            break;
+        }
         Destroy(gameObject);
+    }
+
+    void IntantiateLoot(GameObject loot)
+    {
+        if (loot)
+        {
+            GameObject droppetLoot = Instantiate(loot, transform.position, Quaternion.identity);
+        }
     }
 }
