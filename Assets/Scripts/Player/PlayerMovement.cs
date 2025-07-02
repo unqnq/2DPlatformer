@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -5,13 +6,16 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Components")]
+    [Header("Components and objects")]
     private Rigidbody2D rb;
     public ParticleSystem smokeFx;
+    public ParticleSystem speedFx;
+    private Vector3 speedFxInitialScale;
 
     [Header("Movement Settings")]
     [SerializeField] private float walkSpeed = 10f;
     [SerializeField] private float runSpeed = 15f;
+    [SerializeField] private float speedMultiplier = 1f;
     [SerializeField] private float doubleTapTime = 0.2f;
 
     [HideInInspector] public bool isRunning = false;
@@ -39,6 +43,26 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = baseGravity;
+        speedFxInitialScale = speedFx.transform.localScale;
+        SpeedBooster.OnSpeedCollected += StartSpeedBooster;
+    }
+    void OnDestroy()
+    {
+        SpeedBooster.OnSpeedCollected -= StartSpeedBooster;
+    }
+
+    void StartSpeedBooster(float multiplier)
+    {
+        StartCoroutine(SpeedBoostCoroutine(multiplier));
+    }
+
+    IEnumerator SpeedBoostCoroutine(float multiplier)
+    {
+        speedMultiplier = multiplier;
+        speedFx.Play();
+        yield return new WaitForSeconds(10f);
+        speedMultiplier = 1f;
+        speedFx.Stop();
     }
     private void Update()
     {
@@ -89,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
     private void MoveCharacter()
     {
         float speed = isRunning ? runSpeed : walkSpeed;
-        rb.linearVelocity = new Vector2(horizontalInput * speed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(horizontalInput * speed * speedMultiplier, rb.linearVelocity.y);
     }
 
     private void ApplyGravity()
@@ -119,6 +143,7 @@ public class PlayerMovement : MonoBehaviour
 
         currentDirection = horizontalInput > 0 ? 1 : -1;
         transform.localScale = new Vector3(currentDirection, 1f, 1f);
+        speedFx.transform.localScale = new Vector3(speedFxInitialScale.x * currentDirection, speedFxInitialScale.y, speedFxInitialScale.z);
     }
 
     private void HandleDoubleTap()
