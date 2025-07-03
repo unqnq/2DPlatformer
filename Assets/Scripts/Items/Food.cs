@@ -12,6 +12,7 @@ public class Food : MonoBehaviour, IItem
     {
         OnFoodCollected?.Invoke(foodValue);
         //Знак питання ?. означає, що подія буде викликана лише якщо на неї хтось підписаний (щоб уникнути помилки, якщо підписників немає).
+        SoundEffectManager.Play("Food");
         Destroy(gameObject);
     }
 
