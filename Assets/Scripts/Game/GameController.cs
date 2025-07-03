@@ -69,4 +69,11 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Time.timeScale = 1;
     }
+
+    void OnDestroy()
+    {
+        Food.OnFoodCollected -= AddProgress;
+        HoldToLoadLevel.OnHoldComplete -= LoadNextLevel;
+        PlayerHearts.OnPlayerDied -= GameOverPanel;
+    }
 }

@@ -31,12 +31,13 @@ public class PlayerHearts : MonoBehaviour
     void TakeDamage(int damage)
     {
         currentHearts -= damage;
+        SoundEffectManager.Play("PlayerHit");
         healthBarUI.UpdateHearts(currentHearts);
         StartCoroutine(FlashRed());
         if (currentHearts <= 0)
         {
             // Debug.Log("player is dead!");
-            OnPlayerDied.Invoke();
+            OnPlayerDied?.Invoke();
         }
     }
 
