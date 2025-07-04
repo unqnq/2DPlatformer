@@ -54,4 +54,12 @@ public class SecretText : MonoBehaviour
 
         tmpText.color = targetColor;
     }
+
+    void OnDestroy()
+    {
+        if (currentCoroutine != null)
+        {
+            StopCoroutine(currentCoroutine);
+        }
+    }
 }
