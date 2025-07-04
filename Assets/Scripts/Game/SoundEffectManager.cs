@@ -17,7 +17,8 @@ public class SoundEffectManager : MonoBehaviour
             Instance = this;
             audioSource = GetComponent<AudioSource>();
             soundEffectsLibrary = GetComponent<SoundEffectsLibrary>();
-            DontDestroyOnLoad(gameObject);
+            sfxSlider = GameObject.Find("SfxSlider").GetComponent<Slider>();
+            // DontDestroyOnLoad(gameObject);
         }
         else
         {

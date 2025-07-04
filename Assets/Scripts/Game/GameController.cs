@@ -1,9 +1,7 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using System;
 
 public class GameController : MonoBehaviour
 {
@@ -57,6 +55,7 @@ public class GameController : MonoBehaviour
 
     void GameOverPanel()
     {
+        MusicManager.PauseBackgroundMusic();
         gameOverPanel.SetActive(true);
         itemsText.text = "You have collected " + proggressAmount + "/" + maxProgress;
         itemsText_Border.text = "You have collected " + proggressAmount + "/" + maxProgress;
@@ -65,6 +64,7 @@ public class GameController : MonoBehaviour
 
     public void RestartGame()
     {
+        MusicManager.PlayBackgroundMusic(true);
         gameOverPanel.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Time.timeScale = 1;
