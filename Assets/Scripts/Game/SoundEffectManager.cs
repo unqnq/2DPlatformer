@@ -1,5 +1,6 @@
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SoundEffectManager : MonoBehaviour
@@ -17,12 +18,42 @@ public class SoundEffectManager : MonoBehaviour
             Instance = this;
             audioSource = GetComponent<AudioSource>();
             soundEffectsLibrary = GetComponent<SoundEffectsLibrary>();
-            sfxSlider = GameObject.Find("SfxSlider").GetComponent<Slider>();
-            // DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FindAndAssignSlider();
+    }
+
+    void FindAndAssignSlider()
+    {
+        if (sfxSlider == null)
+        {
+            sfxSlider = GameObject.Find("SfxSlider")?.GetComponent<Slider>();
+        }
+        if (sfxSlider != null)
+        {
+            float savedVolume = PlayerPrefs.GetFloat("SfxVolume", 0.2f);
+            audioSource.volume = savedVolume;
+            sfxSlider.value = savedVolume;
+            sfxSlider.onValueChanged.AddListener(delegate { OnValueChanged(); });
+            //  .onValueChanged очікує функцію з параметром float
+            // використовуємо delegate { ... }, щоб проігнорувати значення й викликати метод без параметрів
         }
     }
 
@@ -38,17 +69,11 @@ public class SoundEffectManager : MonoBehaviour
     public static void SetVolume(float volume)
     {
         audioSource.volume = volume;
+        PlayerPrefs.SetFloat("SfxVolume", volume);
     }
 
     public void OnValueChanged()
     {
         SetVolume(sfxSlider.value);
-    }
-
-    void Start()
-    {
-        sfxSlider.onValueChanged.AddListener(delegate { OnValueChanged(); });
-        //  .onValueChanged очікує функцію з параметром float
-        // використовуємо delegate { ... }, щоб проігнорувати значення й викликати метод без параметрів
     }
 }

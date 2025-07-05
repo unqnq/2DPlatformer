@@ -57,10 +57,14 @@ public class GameController : MonoBehaviour
         //  Debug.Log(SceneManager.sceneCountInBuildSettings + " / " + SceneManager.GetActiveScene().buildIndex);
         if (SceneManager.sceneCountInBuildSettings == SceneManager.GetActiveScene().buildIndex + 1)
         {
+            PlayerPrefs.Save();
             SceneManager.LoadScene("Menu");
-
         }
-        else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        else
+        {
+            PlayerPrefs.Save();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
     }
 
     void GameOverPanel()

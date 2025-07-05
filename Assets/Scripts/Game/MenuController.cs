@@ -27,6 +27,7 @@ public class MenuController : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
         Application.Quit();
+        PlayerPrefs.Save();
     }
 
     public void OpenOptionsPanel()
