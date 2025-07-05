@@ -50,6 +50,7 @@ public class PlayerHearts : MonoBehaviour
 
     void Heal(int amount)
     {
+        if (currentHearts >= maxHearts) return;
         currentHearts += amount;
         if (currentHearts > maxHearts) currentHearts = maxHearts;
 

@@ -11,6 +11,9 @@ public class GameController : MonoBehaviour
     public bool isLevelComplete = false;
     public GameObject gameOverPanel;
     public TMP_Text itemsText, itemsText_Border;
+    public GameObject optionsPanel;
+    public GameObject optionsButton;
+    public GameObject player;
     void Start()
     {
         // GameObject[] foods = GameObject.FindGameObjectsWithTag("Food");
@@ -22,6 +25,13 @@ public class GameController : MonoBehaviour
         //         maxProgress += foodScript.foodValue;
         //     }
         // }
+        optionsPanel = GameObject.Find("OptionsPanel");
+        if (optionsPanel != null)
+        {
+            optionsPanel.SetActive(false);
+        }
+        optionsButton = GameObject.Find("OptionsButton");
+        player = GameObject.Find("Player");
         maxProgress = GameObject.Find("ObjectSpawn").GetComponent<ObjectSpawn>().maxObjectsToSpawn;
         Food.OnFoodCollected += AddProgress;
         HoldToLoadLevel.OnHoldComplete += LoadNextLevel;
@@ -64,10 +74,38 @@ public class GameController : MonoBehaviour
 
     public void RestartGame()
     {
-        MusicManager.PlayBackgroundMusic(true);
+        MusicManager.PlayBackgroundMusic(false);
         gameOverPanel.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Time.timeScale = 1;
+    }
+
+    public void OpenOptionsPanel()
+    {
+        if (optionsPanel != null)
+        {
+            optionsPanel.SetActive(true);
+            optionsButton.SetActive(false);
+            Time.timeScale = 0;
+            if (player != null)
+            {
+                player.GetComponent<PlayerShoot>().canShoot = false;
+            }
+        }
+    }
+
+    public void CloseOptionsPanel()
+    {
+        if (optionsPanel != null)
+        {
+            optionsPanel.SetActive(false);
+            optionsButton.SetActive(true);
+            Time.timeScale = 1;
+            if (player != null)
+            {
+                player.GetComponent<PlayerShoot>().canShoot = true;
+            }
+        }
     }
 
     void OnDestroy()

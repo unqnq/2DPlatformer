@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class HoldToLoadLevel : MonoBehaviour
 {
+    public GameObject hintUI;
     public float holdTime = 2f; // Час, протягом якого потрібно утримувати кнопку
     public Image holdCircle; // UI елемент для відображення кола утримання
 
@@ -14,34 +15,54 @@ public class HoldToLoadLevel : MonoBehaviour
 
     public static event Action OnHoldComplete;
 
+    void Start()
+    {
+        hintUI = GameObject.Find("HintUI");
+        if (hintUI != null)
+        {
+            hintUI.SetActive(false);
+        }
+    }
     void Update()
     {
-        if (isHolding && GameObject.Find("GameController").GetComponent<GameController>().isLevelComplete)
+        if (GameObject.Find("GameController").GetComponent<GameController>().isLevelComplete)
         {
-            // Якщо кнопка утримується і рівень завершено, показуємо коло утримання
-            if (holdCircle != null)
+            if (hintUI != null)
             {
-                holdCircle.gameObject.SetActive(true);
+                hintUI.SetActive(true);
             }
-            if (hintCircle != null)
+            if (isHolding)
             {
-                hintCircle.SetActive(true);
-            }
-            holdTimer += Time.deltaTime; // Збільшуємо таймер на час, що пройшов з останнього кадру
+                // Якщо кнопка утримується і рівень завершено, показуємо коло утримання
+                if (hintUI != null)
+                {
+                    hintUI.SetActive(false);
+                }
+                if (holdCircle != null)
+                {
+                    holdCircle.gameObject.SetActive(true);
+                }
+                if (hintCircle != null)
+                {
+                    hintCircle.SetActive(true);
+                }
+                holdTimer += Time.deltaTime; // Збільшуємо таймер на час, що пройшов з останнього кадру
 
-            // Оновлюємо заповнення кола утримання
-            if (holdCircle != null)
-            {
-                holdCircle.transform.localScale = new Vector2(holdTimer / holdTime, holdTimer / holdTime);
-            }
+                // Оновлюємо заповнення кола утримання
+                if (holdCircle != null)
+                {
+                    holdCircle.transform.localScale = new Vector2(holdTimer / holdTime, holdTimer / holdTime);
+                }
 
-            // Якщо час утримання перевищив поріг, завантажуємо рівень
-            if (holdTimer >= holdTime)
-            {
-                OnHoldComplete?.Invoke();
-                ResetHold();
+                // Якщо час утримання перевищив поріг, завантажуємо рівень
+                if (holdTimer >= holdTime)
+                {
+                    OnHoldComplete?.Invoke();
+                    ResetHold();
+                }
             }
         }
+
     }
     public void OnHold(InputAction.CallbackContext context)
     {

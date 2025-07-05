@@ -5,10 +5,11 @@ public class PlayerShoot : MonoBehaviour
 {
     public GameObject bulletPrefab;
     public float bulletSpeed = 50f;
+    public bool canShoot = true;
 
     void Update()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if (Mouse.current.leftButton.wasPressedThisFrame && canShoot)
         {
             Shoot();
         }

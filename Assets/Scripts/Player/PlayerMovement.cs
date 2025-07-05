@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private float lastTapTime = -1f;
     private int lastDirection = 0;
     private int currentDirection = 0;
+    private Transform spriteTransform;
     [HideInInspector] public float horizontalInput = 0f;
 
     [Header("Jump Settings")]
@@ -43,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = baseGravity;
+        spriteTransform = transform.GetChild(0);
         speedFxInitialScale = speedFx.transform.localScale;
         SpeedBooster.OnSpeedCollected += StartSpeedBooster;
     }
@@ -142,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
         if (horizontalInput == 0) return;
 
         currentDirection = horizontalInput > 0 ? 1 : -1;
-        transform.localScale = new Vector3(currentDirection, 1f, 1f);
+        spriteTransform.localScale = new Vector3(currentDirection*1.5f, 1.5f, 1.5f);
         speedFx.transform.localScale = new Vector3(speedFxInitialScale.x * currentDirection, speedFxInitialScale.y, speedFxInitialScale.z);
     }
 
